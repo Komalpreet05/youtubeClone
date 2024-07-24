@@ -1,121 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Feed.css'
 import { Link } from 'react-router-dom'
+import { API_KEY } from '../../data'
+import { value_converter } from '../../data'
+import moment from 'moment'
 
-const Feed = () => {
+const Feed = ({ category }) => {
+    const [data, setData] = useState([]);
+    const fetchData = async () => {
+        const videoList_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=US&videoCategoryId=${category}&key=${API_KEY}`
+        await fetch(videoList_url).then(res => res.json()).then(data => setData(data.items))
+        console.log(data)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [category])
+
     return (
         <div className='feed'>
-            <Link to={`video/20/4521`} className='card'>
-                <img src="/thumbnail1.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </Link>
-
-            <div className='card'>
-                <img src="/thumbnail2.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail3.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail4.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail5.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail6.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail7.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
+            {data.map((item, index) => {
+                return (
+                    <Link to={`video/${item.snippet.categoryId}/${item.id}`} key={index} className='card'>
+                        <img src={item.snippet.thumbnails.medium.url} alt="" />
+                        <h2>{item.snippet.title}</h2>
+                        <h3>{item.snippet.channelTitle}</h3>
+                        <p>{value_converter(item.statistics.viewCount)} Views &bull; {moment(item.snippet.publishedAt).fromNow()}</p>
+                    </Link>
+                )
+            })}
+            {/* 
             <div className='card'>
                 <img src="/thumbnail8.png" alt="" />
                 <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
                 <h3>GreatStack</h3>
                 <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail1.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail2.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail3.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail4.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail5.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail6.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail7.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
-
-            <div className='card'>
-                <img src="/thumbnail8.png" alt="" />
-                <h2>Best Channel to learn coding that help you to be a Web Developer</h2>
-                <h3>GreatStack</h3>
-                <p>15K Views &bull; 2 days ago</p>
-            </div>
+            </div> */}
         </div>
     )
 }
