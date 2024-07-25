@@ -11,6 +11,8 @@ node_modules
 dist
 test
 data
+*.env
+.env
 dist-ssr
 *.local
 

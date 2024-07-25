@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './PlayVideo.css'
-import { API_KEY, value_converter } from '../../data';
+import { value_converter } from '../../data';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 
@@ -9,11 +9,10 @@ const PlayVideo = () => {
     const [apiData, setApiData] = useState(null);
     const [channelData, setChannelData] = useState(null);
     const [commentData, setCommentData] = useState([]);
-    const newApi = 'AIzaSyANXuG7glNndFUrTtyL7tLCpcp5XGYs0lc'
+    const api_key = import.meta.env.VITE_API_KEY;
     const fetchVideoData = async () => {
-        //fetching videos data
-        // https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}=${API_KEY}
-        const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`
+
+        const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${api_key}`
         await fetch(videoDetails_url).then(res => res.json()).then(data => setApiData(data.items[0]))
 
     }
@@ -21,12 +20,12 @@ const PlayVideo = () => {
     const fetchOtherData = async () => {
         //fetching channel data
         if (apiData) {
-            const channelData_url = await `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${API_KEY}`
+            const channelData_url = await `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${api_key}`
             await fetch(channelData_url).then(res => res.json()).then(data => setChannelData(data.items[0]))
 
         }
 
-        const commentUrl = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=50&videoId=${videoId}&key=${API_KEY}`
+        const commentUrl = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=50&videoId=${videoId}&key=${api_key}`
 
         await fetch(commentUrl).then(res => res.json()).then(data => setCommentData(data.items))
     }
