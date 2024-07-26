@@ -37,7 +37,7 @@ const PlayVideo = () => {
     useEffect(() => {
         fetchOtherData();
     }, [apiData])
-    console.log(commentData);
+    // console.log(commentData);
     const test = "<br>"
 
     return (

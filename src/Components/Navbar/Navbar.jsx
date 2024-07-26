@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
-import Home from '../../Pages/Home/Home'
+import { useParams } from 'react-router-dom';
 
-const Navbar = ({ setSidebar }) => {
+const Navbar = ({ setSidebar, homePage, setInput }) => {
+    const { videoId } = useParams();
     return (
         <nav className='flex-div'>
             <div className='nav-left flex-div'>
-                <img src="/menu.png" alt="menu-icon" className='menu-icon' onClick={() => { setSidebar(prev => !prev) }} />
+                {homePage && <img src="/menu.png" alt="menu-icon" className='menu-icon' onClick={() => { setSidebar(prev => !prev) }} />}
+
                 <Link to="/">
                     <img src="/logo.png" alt="logo" className='logo' />
                 </Link>
@@ -15,7 +17,7 @@ const Navbar = ({ setSidebar }) => {
 
             <div className="nav-middle flex-div">
                 <div className="search-box flex-div">
-                    <input type="text" placeholder='Search' />
+                    <input type="text" placeholder='Search' onChange={(e) => setInput(e.target.value)} />
                     <img src="/search.png" alt="search-icon" className='search-icon' />
                 </div>
 
